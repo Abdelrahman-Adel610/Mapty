@@ -1,8 +1,8 @@
 :root {
     --main-bg: #2d3439;
     --secondary-bg: #42484d;
-    --run-border: #ffb545;
-    --cycle-border: #00c46a;
+    --cycle-border: #ffb545;
+    --run-border: #00c46a;
     --main-font: #ECECEC;
     --light-font: #AAAAAA;
 }
@@ -10,6 +10,7 @@
 body {
     color: var(--main-font);
     font-family: "Manrope", sans-serif;
+    scrollbar-;
 }
 
 .w-90 {
@@ -20,12 +21,11 @@ body {
     background-color: var(--main-bg);
 }
 
-.form {
-    /* background-color: #42484d; */
-}
+
+
 
 .acions img {
-    height: 56px;
+    height: 50px;
 }
 
 input,
@@ -36,7 +36,7 @@ select {
 .action-center .col-12 {
     background-color: var(--secondary-bg);
     padding: 1rem 2rem;
-    border-radius: .625rem;
+    border-radius: .375rem;
     font-weight: 600;
 }
 
@@ -49,4 +49,28 @@ select {
 
 input:focus {
     background-color: #ffffff;
+}
+
+.cylcling,
+.running {
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.sub {
+    color: var(--light-font);
+    font-size: 10px;
+}
+
+.cylcling {
+    border-color: var(--cycle-border) !important;
+}
+
+.running {
+    border-color: var(--run-border) !important;
+}
+
+footer p.sub {
+    font-size: 12px;
+
 }

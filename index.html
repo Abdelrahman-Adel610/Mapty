@@ -19,15 +19,15 @@
 
 <body>
     <main class="container-fluid ms-auto p-4 vh-100">
-        <div class="row h-100 ">
-            <div class="h-100 overflow-y-auto col-md-5 col-lg-4 acions">
-                <div class="logo row">
-                    <picture class="col-12 text-center my-5">
-                        <img src="Images/logo.png" alt="logo">
-                    </picture>
-                </div>
-                <div class="row action-center w-90 m-auto">
-                    <div class="col-12 mb-3 form">
+        <div class="row h-100">
+            <div class="h-100 col-md-5 col-lg-4 acions  d-flex flex-column justify-content-between">
+                <picture class="text-center mt-5">
+                    <img src="Images/logo.png" alt="logo">
+                </picture>
+
+                <div
+                    class="row action-center w-90 mx-auto overflow-y-auto d-flex flex-column justify-content-start gap-3 flex-nowrap">
+                    <div class="col-12  form ">
                         <form>
                             <div class="row row-cols-4 gy-1">
                                 <div class="col"> <label for="Type">Type</label></div>
@@ -52,9 +52,34 @@
                             </div>
                         </form>
                     </div>
+                    <div class="col-12 cylcling border-start border-5 ">
+                        <h2 class="fs-5 mb-3">Cycling on September 6</h2>
+                        <div class="row row-cols-sm-4 row-cols-2 text-center gx-1">
+                            <div class="col">🚴‍♀️ 14 <span class="sub"> KM </span></div>
+                            <div class="col">⏱41 <span class="sub"> MIN </span></div>
+                            <div class="col">⚡️20.5 <span class="sub"> KM/H </span></div>
+                            <div class="col text-center">⛰ 14 <span class="sub"> M </span></div>
+                        </div>
+                    </div>
+                    <div class="col-12 running border-start border-5 ">
+                        <h2 class="fs-5 mb-3">Running on September 6</h2>
+                        <div class="row row-cols-sm-4 row-cols-2 text-center gx-1 ">
+                            <div class="col">🚴‍♀️ 14 <span class="sub"> KM </span></div>
+                            <div class="col">⏱41 <span class="sub"> MIN </span></div>
+                            <div class="col">⚡️20.5 <span class="sub"> MIN/KM </span></div>
+                            <div class="col text-center">🦶🏼
+                                14 <span class="sub"> SPM </span></div>
+                        </div>
+                    </div>
+
                 </div>
-
-
+                <footer class="w-90  mx-auto my-3">
+                    <p class="sub text-center ">© Copyright by Jonas Schmedtmann. Use for learning or your
+                        portfolio.
+                        Don't use
+                        to
+                        teach. Don't claim as your own.</p>
+                </footer>
             </div>
             <div class="col bg-body-secondary map align-self-start h-100"></div>
         </div>
