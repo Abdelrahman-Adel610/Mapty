@@ -1,3 +1,17 @@
+:root {
+    --main-bg: #2d3439;
+    --secondary-bg: #42484d;
+    --run-border: #ffb545;
+    --cycle-border: #00c46a;
+    --main-font: #ECECEC;
+    --light-font: #AAAAAA;
+}
+
 body {
+    color: var(--main-font);
     font-family: "Manrope", sans-serif;
+}
+
+.acion-center {
+    background-color: var(--main-bg);
 }
