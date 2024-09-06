@@ -12,6 +12,41 @@ body {
     font-family: "Manrope", sans-serif;
 }
 
-.acion-center {
+.w-90 {
+    width: 90%;
+}
+
+.acions {
     background-color: var(--main-bg);
+}
+
+.form {
+    /* background-color: #42484d; */
+}
+
+.acions img {
+    height: 56px;
+}
+
+input,
+select {
+    width: 100%;
+}
+
+.action-center .col-12 {
+    background-color: var(--secondary-bg);
+    padding: 1rem 2rem;
+    border-radius: .625rem;
+    font-weight: 600;
+}
+
+.action-center input,
+.action-center select {
+    background-color: var(--main-font);
+    outline: none;
+    font-size: .875rem;
+}
+
+input:focus {
+    background-color: #ffffff;
 }
