@@ -8,6 +8,8 @@ let distaceInput = document.querySelector("#Distace");
 let durationInput = document.querySelector("#Duration");
 let cadenceInput = document.querySelector("#Cadence");
 let elevInput = document.querySelector("#ElevGain");
+let actionsCenter = document.querySelector(".action-center");
+
 /*********************************CLASSES*********************************/
 class Workout {
   distance;
@@ -15,12 +17,12 @@ class Workout {
   type;
   date = new Date();
   id = this.date.getTime().toString().slice(-10);
-  #coord = {};
+  coord = {};
   constructor(distance, duration, lat, long) {
     this.distance = distance;
     this.duration = duration;
-    this.#coord.lat = lat;
-    this.#coord.long = long;
+    this.coord.lat = lat;
+    this.coord.long = long;
   }
 }
 class running extends Workout {
@@ -61,6 +63,7 @@ class App {
       gain.forEach((el) => el.classList.toggle("d-none"));
     });
     form.addEventListener("submit", this.#putMarkOnMap.bind(this));
+    actionsCenter.addEventListener("click", this.#moveTo.bind(this));
   }
   #initial() {
     navigator.geolocation.getCurrentPosition(
@@ -201,6 +204,18 @@ class App {
   #clearInput() {
     document.querySelectorAll("input").forEach((el) => {
       el.value = "";
+    });
+  }
+  #moveTo(el) {
+    let par = el.target.closest(".col-12.border-5");
+    if (!par) return;
+    let id = par.getAttribute("data-id");
+    let targetWorkout = this.#workouts.find((el) => el.id === id);
+    this.#map.setView([targetWorkout.coord.lat, targetWorkout.coord.long], 13, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
     });
   }
 }
