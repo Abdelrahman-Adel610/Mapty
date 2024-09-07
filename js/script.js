@@ -5,7 +5,44 @@ let cadence = document.querySelectorAll(".run-input");
 let gain = document.querySelectorAll(".cylce-input");
 let form = document.querySelector(".form");
 
-/*********************************THE MAIN CLASS*********************************/
+/*********************************CLASSES*********************************/
+class Workout {
+  distance;
+  duration;
+  #date = new Date();
+  #id = this.#date.getTime().toString().slice(-10);
+  #coord = {};
+  constructor(distance, duration, lat, long) {
+    this.distance = distance;
+    this.duration = duration;
+    this.#coord.lat = lat;
+    this.#coord.long = long;
+  }
+}
+class running extends Workout {
+  cadence;
+  constructor(distance, duration, cadence, lat, long) {
+    super(distance, duration, lat, long);
+    this.cadence = cadence;
+    this.clacPace();
+  }
+  clacPace() {
+    this.pace = this.duration / this.distance;
+    return this.pace;
+  }
+}
+class cycling extends Workout {
+  elvGain;
+  constructor(distance, duration, elvGain, lat, long) {
+    super(distance, duration, lat, long);
+    this.elvGain = elvGain;
+    this.clacSpeed();
+  }
+  clacSpeed() {
+    this.speed = this.distance / (this.duration / 60);
+    return this.speed;
+  }
+}
 class App {
   #map;
   #clickLocation = {};
@@ -39,12 +76,9 @@ class App {
   }
 
   #mapClick(e) {
-    console.log(e, this);
-
     form.classList.remove("d-none");
     this.#clickLocation.lat = e.latlng.lat;
     this.#clickLocation.long = e.latlng.lng;
-    console.log(this.#clickLocation);
   }
   #putMarkOnMap(e, msg = `A pretty CSS popup.<br> Easily customizable.`) {
     e.preventDefault();
