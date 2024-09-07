@@ -1,7 +1,14 @@
 "use strict";
+/*********************************ELEMENTS*********************************/
+let typeSelector = document.querySelector("select");
+let cadence = document.querySelectorAll(".run-input");
+let gain = document.querySelectorAll(".cylce-input");
+let form = document.querySelector(".form");
 let coords = {};
+let map;
+let popupLoc = {};
+/*********************************UTILITIES*********************************/
 function putMarker(
-  L,
   map,
   lat,
   long,
@@ -22,7 +29,7 @@ function putMarker(
     .openPopup();
 }
 function renderMap(lat, long, zoom = 13) {
-  let map = L.map("map").setView([lat, long], zoom);
+  map = L.map("map").setView([lat, long], zoom);
 
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
@@ -30,8 +37,20 @@ function renderMap(lat, long, zoom = 13) {
   }).addTo(map);
 
   map.on("click", function (e) {
-    console.log(e);
-    putMarker(L, map, e.latlng.lat, e.latlng.lng);
+    form.classList.remove("d-none");
+    popupLoc.lat = e.latlng.lat;
+    popupLoc.long = e.latlng.lng;
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    putMarker(map, popupLoc.lat, popupLoc.long);
+    clearInput();
+    !form.classList.contains("d-none") && form.classList.add("d-none");
+  });
+}
+function clearInput() {
+  document.querySelectorAll("input").forEach((el) => {
+    el.value = "";
   });
 }
 function initial() {
@@ -46,4 +65,9 @@ function initial() {
   );
 }
 
+/*********************************EVENTS*********************************/
+typeSelector.addEventListener("change", function (e) {
+  cadence.forEach((el) => el.classList.toggle("d-none"));
+  gain.forEach((el) => el.classList.toggle("d-none"));
+});
 initial();

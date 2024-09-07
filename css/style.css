@@ -83,3 +83,7 @@ footer p.sub {
     font-size: .875rem;
     border-radius: .3125rem !important;
 }
+
+.form {
+    transition: all 5s !important;
+}

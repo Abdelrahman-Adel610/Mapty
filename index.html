@@ -31,29 +31,38 @@
 
                 <div
                     class="row action-center w-90 mx-auto overflow-y-auto d-flex flex-column justify-content-start gap-3 flex-nowrap">
-                    <div class="col-12  form ">
-                        <form>
-                            <div class="row row-cols-4 gy-1">
-                                <div class="col"> <label for="Type">Type</label></div>
-                                <div class="col"><select class="rounded-2 px-2 " name="Type" required>
-                                        <option value="Cycling">Cycling</option>
-                                        <option value="Running">Running</option>
-                                    </select></div>
-                                <div class="col"><label for="Distace">Distace</label></div>
-                                <div class="col"><input class="rounded-2 px-2 " type="text" placeholder="km" required>
-                                </div>
-                                <div class="col"><label for="Duration">Duration</label></div>
-
-                                <div class="col">
-                                    <input class="rounded-2 px-2 " type="text" name="Duration" placeholder="min">
-                                </div>
-                                <div class="col">
-                                    <label for="Cadence">Cadence</label>
-                                </div>
-                                <div class="col">
-                                    <input class="rounded-2 px-2 " type="text" placeholder="step/min">
-                                </div>
+                    <div class="col-12 form d-none">
+                        <form class="row row-cols-4 gy-1">
+                            <div class="col"> <label for="Type" for="type">Type</label></div>
+                            <div class="col"><select class="rounded-2 px-2 " name="Type" id="type" required>
+                                    <option value="Running">Running</option>
+                                    <option value="Cycling">Cycling</option>
+                                </select></div>
+                            <div class="col"><label for="Distace">Distace</label></div>
+                            <div class="col"><input class="rounded-2 px-2 " type="text" placeholder="km" id="Distace"
+                                    name="Distace" required>
                             </div>
+                            <div class="col"><label for="Duration">Duration</label></div>
+
+                            <div class="col">
+                                <input class="rounded-2 px-2 " type="text" name="Duration" placeholder="min"
+                                    id="Duration" required>
+                            </div>
+                            <div class="col run-input">
+                                <label for="Cadence">Cadence</label>
+                            </div>
+                            <div class="col run-input">
+                                <input class="rounded-2 px-2 " type="text" placeholder="step/min" name="Cadence"
+                                    id="Cadence">
+                            </div>
+                            <div class="col d-none cylce-input">
+                                <label for="ElevGain">Elev Gain</label>
+                            </div>
+                            <div class="col d-none cylce-input">
+                                <input class="rounded-2 px-2" type="text" placeholder="meters" id="ElevGain"
+                                    name="ElevGain">
+                            </div>
+                            <button type="submit" class="d-none"></button>
                         </form>
                     </div>
                     <div class="col-12 cylcling border-start border-5 ">
