@@ -1,16 +1,20 @@
 "use strict";
 /*********************************ELEMENTS*********************************/
-let typeSelector = document.querySelector("select");
 let cadence = document.querySelectorAll(".run-input");
 let gain = document.querySelectorAll(".cylce-input");
 let form = document.querySelector(".form");
-
+let typeInput = document.querySelector("select");
+let distaceInput = document.querySelector("#Distace");
+let durationInput = document.querySelector("#Duration");
+let cadenceInput = document.querySelector("#Cadence");
+let elevInput = document.querySelector("#ElevGain");
 /*********************************CLASSES*********************************/
 class Workout {
   distance;
   duration;
-  #date = new Date();
-  #id = this.#date.getTime().toString().slice(-10);
+  type;
+  date = new Date();
+  #id = this.date.getTime().toString().slice(-10);
   #coord = {};
   constructor(distance, duration, lat, long) {
     this.distance = distance;
@@ -23,6 +27,7 @@ class running extends Workout {
   cadence;
   constructor(distance, duration, cadence, lat, long) {
     super(distance, duration, lat, long);
+    this.type = "running";
     this.cadence = cadence;
     this.clacPace();
   }
@@ -35,6 +40,7 @@ class cycling extends Workout {
   elvGain;
   constructor(distance, duration, elvGain, lat, long) {
     super(distance, duration, lat, long);
+    this.type = "cycling";
     this.elvGain = elvGain;
     this.clacSpeed();
   }
@@ -46,10 +52,11 @@ class cycling extends Workout {
 class App {
   #map;
   #clickLocation = {};
+  #workouts = [];
 
   constructor() {
     this.#initial(); //gets navigator location and displays a map
-    typeSelector.addEventListener("change", function (e) {
+    typeInput.addEventListener("change", function (e) {
       cadence.forEach((el) => el.classList.toggle("d-none"));
       gain.forEach((el) => el.classList.toggle("d-none"));
     });
@@ -80,9 +87,48 @@ class App {
     this.#clickLocation.lat = e.latlng.lat;
     this.#clickLocation.long = e.latlng.lng;
   }
-  #putMarkOnMap(e, msg = `A pretty CSS popup.<br> Easily customizable.`) {
+  #putMarkOnMap(e) {
     e.preventDefault();
 
+    let type = typeInput.value;
+    let distace = +distaceInput.value;
+    let duration = +durationInput.value;
+    let cadence = +cadenceInput.value;
+    let elev = +elevInput.value;
+
+    if (
+      !(
+        distace > 0 &&
+        duration > 0 &&
+        ((cadence > 0 && type === "Running") ||
+          (elev > 0 && type === "Cycling"))
+      )
+    )
+      return alert("You should enter positve values");
+    let Workout =
+      type === "Running"
+        ? new running(
+            distace,
+            duration,
+            cadence,
+            this.#clickLocation.lat,
+            this.#clickLocation.long
+          )
+        : new cycling(
+            distace,
+            duration,
+            elev,
+            this.#clickLocation.lat,
+            this.#clickLocation.long
+          );
+    this.#workouts.push(Workout);
+    let formattedDate = new Intl.DateTimeFormat(navigator.language, {
+      day: "numeric",
+      month: "long",
+    }).format(Workout.date);
+    let msg = `${
+      type === "Cycling" ? "🚴‍♀️ Cycling" : "🏃‍♂️ Running"
+    } on ${formattedDate} `;
     L.marker([this.#clickLocation.lat, this.#clickLocation.long])
       .addTo(this.#map)
       .bindPopup(
@@ -91,7 +137,7 @@ class App {
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
-          className: "cylcling border-start border-5 rounded-2",
+          className: `${Workout.type} border-start border-5 rounded-2`,
         })
       )
       .setPopupContent(msg)
