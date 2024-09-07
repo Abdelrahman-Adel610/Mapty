@@ -10,7 +10,7 @@
 body {
     color: var(--main-font);
     font-family: "Manrope", sans-serif;
-    scrollbar-;
+
 }
 
 .w-90 {
@@ -73,4 +73,13 @@ input:focus {
 footer p.sub {
     font-size: 12px;
 
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    font-family: "Manrope", sans-serif !important;
+    background-color: var(--main-bg) !important;
+    color: var(--main-font-font) !important;
+    font-size: .875rem;
+    border-radius: .3125rem !important;
 }
