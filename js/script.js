@@ -14,7 +14,7 @@ class Workout {
   duration;
   type;
   date = new Date();
-  #id = this.date.getTime().toString().slice(-10);
+  id = this.date.getTime().toString().slice(-10);
   #coord = {};
   constructor(distance, duration, lat, long) {
     this.distance = distance;
@@ -88,6 +88,53 @@ class App {
     this.#clickLocation.lat = e.latlng.lat;
     this.#clickLocation.long = e.latlng.lng;
   }
+  #addCycling(msg, workout) {
+    let html = `
+                    <div class="col-12 cycling border-start border-5 " data-id='${
+                      workout.id
+                    }'>
+                        <h2 class="fs-5 mb-3">${msg.slice(5)}</h2>
+                        <div class="row row-cols-sm-4 row-cols-2 text-center gx-1">
+                            <div class="col">🚴‍♀️ ${
+                              workout.distance
+                            } <span class="sub"> KM </span></div>
+                            <div class="col">⏱ ${
+                              workout.duration
+                            } <span class="sub"> MIN </span></div>
+                            <div class="col">⚡️ ${workout.speed.toFixed(
+                              1
+                            )} <span class="sub"> KM/H </span></div>
+                            <div class="col text-center">⛰ ${
+                              workout.elvGain
+                            } <span class="sub"> M </span></div>
+                        </div>
+                    </div>`;
+    form.insertAdjacentHTML("afterend", html);
+  }
+  #addRunning(msg, workout) {
+    let html = `
+                    <div class="col-12 running border-start border-5" data-id='${
+                      workout.id
+                    }'>
+                        <h2 class="fs-5 mb-3">${msg.slice(5)}</h2>
+                        <div class="row row-cols-sm-4 row-cols-2 text-center gx-1 ">
+                            <div class="col">🚴‍♀️ ${
+                              workout.distance
+                            } <span class="sub"> KM </span></div>
+                            <div class="col">⏱ ${
+                              workout.duration
+                            } <span class="sub"> MIN </span></div>
+                            <div class="col">⚡️ ${
+                              workout.pace
+                            } <span class="sub"> MIN/KM </span></div>
+                            <div class="col text-center">🦶🏼
+                                ${
+                                  workout.cadence
+                                } <span class="sub"> SPM </span></div>
+                        </div>
+                    </div>`;
+    form.insertAdjacentHTML("afterend", html);
+  }
   #putMarkOnMap(e) {
     e.preventDefault();
 
@@ -130,6 +177,9 @@ class App {
     let msg = `${
       type === "Cycling" ? "🚴‍♀️ Cycling" : "🏃‍♂️ Running"
     } on ${formattedDate} `;
+    type === "Cycling"
+      ? this.#addCycling(msg, Workout)
+      : this.#addRunning(msg, Workout);
     L.marker([this.#clickLocation.lat, this.#clickLocation.long])
       .addTo(this.#map)
       .bindPopup(
