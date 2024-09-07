@@ -84,6 +84,7 @@ class App {
 
   #mapClick(e) {
     form.classList.remove("d-none");
+    setTimeout(() => form.classList.remove("hidden"), 0.1);
     this.#clickLocation.lat = e.latlng.lat;
     this.#clickLocation.long = e.latlng.lng;
   }
@@ -144,7 +145,8 @@ class App {
       .openPopup();
 
     this.#clearInput();
-    !form.classList.contains("d-none") && form.classList.add("d-none");
+    !form.classList.contains("hidden") && form.classList.add("hidden");
+    form.classList.add("d-none");
   }
   #clearInput() {
     document.querySelectorAll("input").forEach((el) => {

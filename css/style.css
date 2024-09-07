@@ -57,6 +57,10 @@ input:focus {
     font-size: 15px;
 }
 
+.action-center::-webkit-scrollbar {
+    width: 0;
+}
+
 .sub {
     color: var(--light-font);
     font-size: 10px;
@@ -85,5 +89,11 @@ footer p.sub {
 }
 
 .form {
-    transition: all 5s !important;
+    transition: all 1s !important;
+}
+
+.form.hidden {
+    transform: translateY(-1.25rem);
+    height: 0px;
+    opacity: 0;
 }
