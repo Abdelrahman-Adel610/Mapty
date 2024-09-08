@@ -148,7 +148,6 @@ class App {
                                 } <span class="sub"> SPM </span></div>
                         </div>
                     </div>`;
-    console.log(form);
 
     form.insertAdjacentHTML("afterend", html);
   }
@@ -212,15 +211,11 @@ class App {
             this.#clickLocation.lat,
             this.#clickLocation.long
           );
-    console.log(Workout);
 
     this.#workouts.push(Workout);
     this.#secondaryWorkouts.push(Workout);
     if (this.#sorted) {
-      this.#workouts.sort((a, b) => {
-        console.log(a.distance - b.distance);
-        return a.distance - b.distance;
-      });
+      this.#sortDistances(this.#workouts);
     }
     this.#displayStored();
     this.#clearInput();
@@ -299,7 +294,6 @@ class App {
     }
     if (parent?.classList.contains("btn-warning")) {
       this.#sorted = 1;
-      console.log(this.#workouts);
 
       this.#orderData.call(this);
 
@@ -328,15 +322,10 @@ class App {
   #orderData() {
     if (this.#sorted) {
       this.#secondaryWorkouts = [...this.#workouts];
-      console.log(this.#secondaryWorkouts);
-      this.#secondaryWorkouts.sort((a, b) => {
-        console.log(a.distance - b.distance);
-        return a.distance - b.distance;
-      });
+      this.#sortDistances(this.#secondaryWorkouts);
       let swap = [...this.#secondaryWorkouts];
       this.#secondaryWorkouts = [...this.#workouts];
       this.#workouts = [...swap];
-      console.log(this.#workouts, this.#secondaryWorkouts);
     } else {
       let swap = [...this.#workouts];
       this.#workouts = [...this.#secondaryWorkouts];
@@ -345,6 +334,11 @@ class App {
     this.#clearStagingArea();
 
     this.#displayStored();
+  }
+  #sortDistances(obj) {
+    obj.sort((a, b) => {
+      return a.distance - b.distance;
+    });
   }
 }
 /*********************************ENTRY POINT*********************************/
