@@ -2,7 +2,7 @@
 /*********************************ELEMENTS*********************************/
 let cadence = document.querySelectorAll(".run-input");
 let gain = document.querySelectorAll(".cylce-input");
-let form = document.querySelector(".form");
+let form = document.getElementsByClassName("form")[0];
 let typeInput = document.querySelector("select");
 let distaceInput = document.querySelector("#Distace");
 let durationInput = document.querySelector("#Duration");
@@ -148,6 +148,8 @@ class App {
                                 } <span class="sub"> SPM </span></div>
                         </div>
                     </div>`;
+    console.log(form);
+
     form.insertAdjacentHTML("afterend", html);
   }
   #generateMSG(date, type) {
@@ -210,16 +212,17 @@ class App {
             this.#clickLocation.lat,
             this.#clickLocation.long
           );
+    console.log(Workout);
 
     this.#workouts.push(Workout);
-    // this.#secondaryWorkouts.push(Workout);
-    // if (this.#sorted) {
-    //   this.#workouts.sort((a, b) => a.distance - b.distance);
-    // } else this.#secondaryWorkouts.sort((a, b) => a.distance - b.distance);
-    // console.log(1000);
-    this.#addWorkout(Workout);
-
-    // this.#displayStored();
+    this.#secondaryWorkouts.push(Workout);
+    if (this.#sorted) {
+      this.#workouts.sort((a, b) => {
+        console.log(a.distance - b.distance);
+        return a.distance - b.distance;
+      });
+    }
+    this.#displayStored();
     this.#clearInput();
     !form.classList.contains("hidden") && form.classList.add("hidden");
     form.classList.add("d-none");
@@ -272,9 +275,15 @@ class App {
     if (!this.#workouts) this.#workouts = [];
     if (!this.#secondaryWorkouts) this.#secondaryWorkouts = [];
   }
+  #clearStagingArea() {
+    [...actionsCenter.children].forEach((el) => {
+      if (!el.classList.contains("form")) {
+        el.remove();
+      }
+    });
+  }
   #displayStored() {
-    console.log(this.#workouts);
-
+    this.#clearStagingArea();
     this.#workouts.forEach((el) => this.#addWorkout(el));
   }
 
@@ -333,41 +342,8 @@ class App {
       this.#workouts = [...this.#secondaryWorkouts];
       this.#secondaryWorkouts = [...swap];
     }
-    actionsCenter.innerHTML = ` <div class="col-12 form hidden d-none">
-    <form class="row row-cols-4 gy-1">
-        <div class="col"> <label for="Type" for="type">Type</label></div>
-        <div class="col"><select class="rounded-2 px-2 " name="Type" id="type">
-                <option value="Running">Running</option>
-                <option value="Cycling">Cycling</option>
-            </select></div>
-        <div class="col"><label for="Distace">Distace</label></div>
-        <div class="col"><input class="rounded-2 px-2 " type="text" placeholder="km" id="Distace"
-                name="Distace">
-        </div>
-        <div class="col"><label for="Duration">Duration</label></div>
+    this.#clearStagingArea();
 
-        <div class="col">
-            <input class="rounded-2 px-2 " type="text" name="Duration" placeholder="min"
-                id="Duration">
-        </div>
-        <div class="col run-input">
-            <label for="Cadence">Cadence</label>
-        </div>
-        <div class="col run-input">
-            <input class="rounded-2 px-2 " type="text" placeholder="step/min" name="Cadence"
-                id="Cadence">
-        </div>
-        <div class="col d-none cylce-input">
-            <label for="ElevGain">Elev Gain</label>
-        </div>
-        <div class="col d-none cylce-input">
-            <input class="rounded-2 px-2" type="text" placeholder="meters" id="ElevGain"
-                name="ElevGain">
-        </div>
-        <button type="submit" class="d-none"></button>
-    </form>
-</div>`;
-    form = document.querySelector(".form");
     this.#displayStored();
   }
 }
