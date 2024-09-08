@@ -138,6 +138,29 @@ class App {
                     </div>`;
     form.insertAdjacentHTML("afterend", html);
   }
+  #generateMSG(date, type) {
+    let formattedDate = new Intl.DateTimeFormat(navigator.language, {
+      day: "numeric",
+      month: "long",
+    }).format(date);
+    let msg = `${
+      type === "cycling" ? "🚴‍♀️ Cycling" : "🏃‍♂️ Running"
+    } on ${formattedDate} `;
+    return msg;
+  }
+  #addWorkout(Workout) {
+    let msg = this.#generateMSG(Workout.date, Workout.type);
+    Workout.type === "cycling"
+      ? this.#addCycling(msg, Workout)
+      : this.#addRunning(msg, Workout);
+    this.#markLocation.call(
+      this,
+      this.#clickLocation.lat,
+      this.#clickLocation.long,
+      Workout.type,
+      Workout.date
+    );
+  }
   #putMarkOnMap(e) {
     e.preventDefault();
 
@@ -173,17 +196,14 @@ class App {
             this.#clickLocation.long
           );
     this.#workouts.push(Workout);
-    let formattedDate = new Intl.DateTimeFormat(navigator.language, {
-      day: "numeric",
-      month: "long",
-    }).format(Workout.date);
-    let msg = `${
-      type === "Cycling" ? "🚴‍♀️ Cycling" : "🏃‍♂️ Running"
-    } on ${formattedDate} `;
-    type === "Cycling"
-      ? this.#addCycling(msg, Workout)
-      : this.#addRunning(msg, Workout);
-    L.marker([this.#clickLocation.lat, this.#clickLocation.long])
+    this.#addWorkout.call(this, Workout);
+    this.#clearInput();
+    !form.classList.contains("hidden") && form.classList.add("hidden");
+    form.classList.add("d-none");
+  }
+  #markLocation(lat, long, type, date) {
+    let msg = this.#generateMSG(date, type);
+    L.marker([lat, long])
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -191,15 +211,11 @@ class App {
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
-          className: `${Workout.type} border-start border-5 rounded-2`,
+          className: `${type} border-start border-5 rounded-2`,
         })
       )
       .setPopupContent(msg)
       .openPopup();
-
-    this.#clearInput();
-    !form.classList.contains("hidden") && form.classList.add("hidden");
-    form.classList.add("d-none");
   }
   #clearInput() {
     document.querySelectorAll("input").forEach((el) => {
