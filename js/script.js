@@ -9,7 +9,8 @@ let durationInput = document.querySelector("#Duration");
 let cadenceInput = document.querySelector("#Cadence");
 let elevInput = document.querySelector("#ElevGain");
 let actionsCenter = document.querySelector(".action-center");
-let resetBtn = document.querySelector(".btn-danger");
+let footerBtns = document.querySelector("footer .col");
+let sortingBtn = footerBtns.lastElementChild;
 
 /*********************************CLASSES*********************************/
 class Workout {
@@ -56,10 +57,14 @@ class App {
   #map;
   #clickLocation = {};
   #workouts = [];
+  #secondaryWorkouts = [];
+  #sorted = 0;
 
   constructor() {
     this.#initial(); //gets navigator location and displays a map
+    this.#updateSortingBtn();
     this.#getStoredData();
+    // this.#orderData();
     typeInput.addEventListener("change", function (e) {
       cadence.forEach((el) => el.classList.toggle("d-none"));
       gain.forEach((el) => el.classList.toggle("d-none"));
@@ -70,7 +75,7 @@ class App {
       "beforeunload",
       this.#updateLocalStorage.bind(this)
     );
-    resetBtn.addEventListener("click", this.#resetApp);
+    footerBtns.addEventListener("click", this.#footerAction.bind(this));
   }
   #initial() {
     navigator.geolocation.getCurrentPosition(
@@ -205,8 +210,16 @@ class App {
             this.#clickLocation.lat,
             this.#clickLocation.long
           );
+
     this.#workouts.push(Workout);
-    this.#addWorkout.call(this, Workout);
+    // this.#secondaryWorkouts.push(Workout);
+    // if (this.#sorted) {
+    //   this.#workouts.sort((a, b) => a.distance - b.distance);
+    // } else this.#secondaryWorkouts.sort((a, b) => a.distance - b.distance);
+    // console.log(1000);
+    this.#addWorkout(Workout);
+
+    // this.#displayStored();
     this.#clearInput();
     !form.classList.contains("hidden") && form.classList.add("hidden");
     form.classList.add("d-none");
@@ -246,18 +259,116 @@ class App {
   }
   #updateLocalStorage() {
     localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+    localStorage.setItem(
+      "workoutscpy",
+      JSON.stringify(this.#secondaryWorkouts)
+    );
+    localStorage.setItem("sorted", JSON.stringify(this.#sorted));
   }
   #getStoredData() {
     this.#workouts = JSON.parse(localStorage.getItem("workouts"));
-    if (this.#workouts) return;
-    this.#workouts = [];
+    this.#secondaryWorkouts = JSON.parse(localStorage.getItem("workoutscpy"));
+
+    if (!this.#workouts) this.#workouts = [];
+    if (!this.#secondaryWorkouts) this.#secondaryWorkouts = [];
   }
   #displayStored() {
+    console.log(this.#workouts);
+
     this.#workouts.forEach((el) => this.#addWorkout(el));
   }
+
   #resetApp() {
     location.reload();
     localStorage.clear();
+  }
+  #footerAction(e) {
+    let parent = e.target.closest(".btn");
+
+    if (parent?.classList.contains("btn-danger")) {
+      this.#resetApp();
+    }
+    if (parent?.classList.contains("btn-warning")) {
+      this.#sorted = 1;
+      console.log(this.#workouts);
+
+      this.#orderData.call(this);
+
+      parent.classList.replace("btn-warning", "btn-success");
+    } else if (parent?.classList.contains("btn-success")) {
+      this.#sorted = 0;
+      this.#orderData.call(this);
+
+      parent.classList.replace("btn-success", "btn-warning");
+    }
+  }
+  #updateSortingBtn() {
+    this.#sorted = JSON.parse(localStorage.getItem("sorted"));
+    if (!this.#sorted) this.#sorted = 0;
+
+    if (this.#sorted === 1) {
+      if (sortingBtn.classList.contains("btn-success")) return;
+      sortingBtn.classList.remove("btn-warning");
+      sortingBtn.classList.add("btn-success");
+    } else {
+      if (sortingBtn.classList.contains("btn-warning")) return;
+      sortingBtn.classList.remove("btn-success");
+      sortingBtn.classList.add("btn-warning");
+    }
+  }
+  #orderData() {
+    if (this.#sorted) {
+      this.#secondaryWorkouts = [...this.#workouts];
+      console.log(this.#secondaryWorkouts);
+      this.#secondaryWorkouts.sort((a, b) => {
+        console.log(a.distance - b.distance);
+        return a.distance - b.distance;
+      });
+      let swap = [...this.#secondaryWorkouts];
+      this.#secondaryWorkouts = [...this.#workouts];
+      this.#workouts = [...swap];
+      console.log(this.#workouts, this.#secondaryWorkouts);
+    } else {
+      let swap = [...this.#workouts];
+      this.#workouts = [...this.#secondaryWorkouts];
+      this.#secondaryWorkouts = [...swap];
+    }
+    actionsCenter.innerHTML = ` <div class="col-12 form hidden d-none">
+    <form class="row row-cols-4 gy-1">
+        <div class="col"> <label for="Type" for="type">Type</label></div>
+        <div class="col"><select class="rounded-2 px-2 " name="Type" id="type">
+                <option value="Running">Running</option>
+                <option value="Cycling">Cycling</option>
+            </select></div>
+        <div class="col"><label for="Distace">Distace</label></div>
+        <div class="col"><input class="rounded-2 px-2 " type="text" placeholder="km" id="Distace"
+                name="Distace">
+        </div>
+        <div class="col"><label for="Duration">Duration</label></div>
+
+        <div class="col">
+            <input class="rounded-2 px-2 " type="text" name="Duration" placeholder="min"
+                id="Duration">
+        </div>
+        <div class="col run-input">
+            <label for="Cadence">Cadence</label>
+        </div>
+        <div class="col run-input">
+            <input class="rounded-2 px-2 " type="text" placeholder="step/min" name="Cadence"
+                id="Cadence">
+        </div>
+        <div class="col d-none cylce-input">
+            <label for="ElevGain">Elev Gain</label>
+        </div>
+        <div class="col d-none cylce-input">
+            <input class="rounded-2 px-2" type="text" placeholder="meters" id="ElevGain"
+                name="ElevGain">
+        </div>
+        <button type="submit" class="d-none"></button>
+    </form>
+</div>`;
+    form = document.querySelector(".form");
+    this.#displayStored();
   }
 }
 /*********************************ENTRY POINT*********************************/
