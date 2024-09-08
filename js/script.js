@@ -9,6 +9,7 @@ let durationInput = document.querySelector("#Duration");
 let cadenceInput = document.querySelector("#Cadence");
 let elevInput = document.querySelector("#ElevGain");
 let actionsCenter = document.querySelector(".action-center");
+let resetBtn = document.querySelector(".btn-danger");
 
 /*********************************CLASSES*********************************/
 class Workout {
@@ -69,6 +70,7 @@ class App {
       "beforeunload",
       this.#updateLocalStorage.bind(this)
     );
+    resetBtn.addEventListener("click", this.#resetApp);
   }
   #initial() {
     navigator.geolocation.getCurrentPosition(
@@ -253,7 +255,7 @@ class App {
   #displayStored() {
     this.#workouts.forEach((el) => this.#addWorkout(el));
   }
-  resetApp() {
+  #resetApp() {
     location.reload();
     localStorage.clear();
   }
