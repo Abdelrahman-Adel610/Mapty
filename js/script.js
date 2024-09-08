@@ -58,12 +58,17 @@ class App {
 
   constructor() {
     this.#initial(); //gets navigator location and displays a map
+    this.#getStoredData();
     typeInput.addEventListener("change", function (e) {
       cadence.forEach((el) => el.classList.toggle("d-none"));
       gain.forEach((el) => el.classList.toggle("d-none"));
     });
     form.addEventListener("submit", this.#putMarkOnMap.bind(this));
     actionsCenter.addEventListener("click", this.#moveTo.bind(this));
+    window.addEventListener(
+      "beforeunload",
+      this.#updateLocalStorage.bind(this)
+    );
   }
   #initial() {
     navigator.geolocation.getCurrentPosition(
@@ -78,13 +83,13 @@ class App {
     let zoom = 13;
     let { latitude: lat, longitude: long } = location.coords;
     this.#map = L.map("map").setView([lat, long], zoom);
+    this.#displayStored();
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
     this.#map.on("click", this.#mapClick.bind(this));
   }
-
   #mapClick(e) {
     form.classList.remove("d-none");
     setTimeout(() => form.classList.remove("hidden"), 0.1);
@@ -142,7 +147,8 @@ class App {
     let formattedDate = new Intl.DateTimeFormat(navigator.language, {
       day: "numeric",
       month: "long",
-    }).format(date);
+    }).format(new Date(date));
+
     let msg = `${
       type === "cycling" ? "🚴‍♀️ Cycling" : "🏃‍♂️ Running"
     } on ${formattedDate} `;
@@ -150,13 +156,15 @@ class App {
   }
   #addWorkout(Workout) {
     let msg = this.#generateMSG(Workout.date, Workout.type);
+
     Workout.type === "cycling"
       ? this.#addCycling(msg, Workout)
       : this.#addRunning(msg, Workout);
+
     this.#markLocation.call(
       this,
-      this.#clickLocation.lat,
-      this.#clickLocation.long,
+      Workout.coord.lat,
+      Workout.coord.long,
       Workout.type,
       Workout.date
     );
@@ -233,6 +241,21 @@ class App {
         duration: 1,
       },
     });
+  }
+  #updateLocalStorage() {
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+  }
+  #getStoredData() {
+    this.#workouts = JSON.parse(localStorage.getItem("workouts"));
+    if (this.#workouts) return;
+    this.#workouts = [];
+  }
+  #displayStored() {
+    this.#workouts.forEach((el) => this.#addWorkout(el));
+  }
+  resetApp() {
+    location.reload();
+    localStorage.clear();
   }
 }
 /*********************************STARTING POINT*********************************/
