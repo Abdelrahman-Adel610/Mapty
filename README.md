@@ -10,7 +10,7 @@ As soon as the user submits the form, a pin is put on the map and card at the si
   ## Project Structure 
 
 - `index.html`: The main HTML file.
-- `css/style.css`: The CSS file for styling the game.
+- `css/style.css`: The CSS file for styling.
 - `css/bootstrap.min.css`: Bootstrap css file.
 - `css/bootstrap-icons.min.css`: Bootstrap-icons css file.
 - `js/script.js`: The JavaScript file containing the app logic.
@@ -32,37 +32,37 @@ All the page animations were implemented using only pure js && Leaflet third-par
 ## Technologies Used
 
 - **HTML:** For the site skeleton. 🩻
-- **CSS:** For styling the game components. 🎨
+- **CSS:** For styling components. 🎨
 - **Bootstrap:** For more responsive design. 🤖
 - **JavaScript ES6/ESnext:** For the whole logic. 💻
 - **JavaScript third-party-library:** For interaction with the map. 🗺️
   
 ## Installation
 
-To get started with the Pig Game project, follow these steps:
+To get started with the Mapty project, follow these steps:
 
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/Abdelrahman-Adel610/Bankist-Site
+   git clone https://github.com/Abdelrahman-Adel610/Mapty
    ```
 
 2. **Navigate to the Project Directory:**
 
    ```bash
-   cd Bankist-Site
+   cd Mapty
 
 
 ## Usage
 
 1. click on your workout location.
 2. fill the form.
-3. Have fun with nicely the formatted shown data on the map as well as sidebar for your workout. 
+3. Have fun with the nicely formatted shown data on the map as well as sidebar for your workout. 
 
    
 ## Contributing
 
-If you'd like to contribute to the Pig Game project, please follow these guidelines:
+If you'd like to contribute to Mapty project, please follow these guidelines:
 
 1. **Fork the Repository:** 🍴
    Click the "Fork" button at the top right of the repository page.
